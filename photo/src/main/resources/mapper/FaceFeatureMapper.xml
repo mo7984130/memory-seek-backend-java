@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.driftcloud.photo.mapper.FaceFeatureMapper">
+
+    <resultMap id="SimpleFaceFeatureMap" type="cn.driftcloud.photo.mapper.SimpleFaceFeature">
+        <id column="id" property="id"/>
+        <result column="photo_id" property="photoId"/>
+        <result column="bbox" property="bbox"
+                typeHandler="cn.driftcloud.photo.config.typehandler.JsonbTypeHandler"/>
+    </resultMap>
+
+    <select id="selectSimpleFaceFeatureByFeatureIds" resultMap="SimpleFaceFeatureMap">
+        SELECT id, photo_id, bbox
+        FROM photo_face_feature
+        WHERE id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <resultMap id="FeatureNodeMap" type="cn.driftcloud.photo.mapper.FeatureNode">
+        <id column="id" property="id"/>
+        <result column="person_id" property="personId"/>
+        <result column="embedding" property="embedding"
+                typeHandler="cn.driftcloud.photo.config.typehandler.VectorTypeHandler"/>
+        <result column="score" property="score"/>
+        <result column="photo_id" property="photoId" />
+    </resultMap>
+    <select id="selectAllEmbeddingsWithPersonId" resultMap="FeatureNodeMap">
+        SELECT id, person_id, embedding, score, photo_id
+        FROM photo_face_feature
+    </select>
+</mapper>

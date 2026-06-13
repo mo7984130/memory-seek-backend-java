@@ -1,0 +1,32 @@
+server:
+  port: 83
+
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  main:
+    web-application-type: reactive
+  cloud:
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR}
+      discovery:
+        group: ${spring.profiles.active}
+        namespace: ${NACOS_NAMESPACE}
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth
+              uri: ${AUTH_SERVICE_URI}
+              predicates:
+                - Path=/auth/**
+              filters:
+                - StripPrefix=1
+            - id: photo
+              uri: ${PHOTO_SERVICE_URI}
+              predicates:
+                - Path=/photo/**
+              filters:
+                - StripPrefix=1

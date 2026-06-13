@@ -1,0 +1,58 @@
+server:
+  port: 0 # 默认随机端口
+  shutdown: graceful # 优雅关闭
+
+spring:
+  application:
+    name: auth
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  cloud:
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR}
+      discovery:
+        enabled: ${NACOS_DISCOVERY_ENABLE}
+        group: ${spring.profiles.active}
+        namespace: ${NACOS_NAMESPACE}
+  jackson:
+    time-zone: Asia/Shanghai # 时区
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null # 空不包含
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  rabbitmq:
+    host: ${MQ_HOST}
+    port: ${MQ_PORT}
+    username: ${MQ_USERNAME}
+    password: ${MQ_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
+minio:
+  endpoint: ${OSS_ENDPOINT}
+  access-key: ${OSS_ACCESS_KEY}
+  secret-key: ${OSS_SECRET_KEY}
+  bucket-name: ${OSS_BUCKET_NAME}
+  external-url: ${OSS_EXTERNAL_URL}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'prometheus,health,info' # 暴露 prometheus 格式的数据
+  endpoint:
+    health:
+      show-details: always # 显示详细的健康信息（如磁盘、数据库状态）
+  metrics:
+    tags:
+      application: ${spring.application.name} # 为指标加上服务名标签，方便区分微服务
+

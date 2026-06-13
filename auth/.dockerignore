@@ -1,0 +1,12 @@
+**/target/
+**/src/
+
+**/.git
+**/.idea
+**/.vscode
+**/.gradle
+**/.settings
+.DS_Store
+
+Dockerfile
+.dockerignore

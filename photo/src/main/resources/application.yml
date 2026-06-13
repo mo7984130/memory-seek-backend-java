@@ -1,0 +1,28 @@
+driftcloud:
+  oss:
+
+  img-processor:
+    provider: oss | img-proxy
+  ai:
+    model:
+        det:
+          path: ./models/det_scrfd.onnx
+        rec:
+          path: ./models/rec_glintr100.onnx
+
+spring:
+  application:
+    name: photo
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  cloud:
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR}
+      discovery:
+        group: ${spring.profiles.active}
+        namespace: ${NACOS_NAMESPACE}
+img-proxy:
+  key: 812055cde07673da5b0b40709bf3dc15f53614ae68d96a4e041139f53679c95f
+  salt: 65531efc4389aff00a68bd987accee38b2da4630cb5c7729f87a96e30da3a7ad
+  base-url: https://8.148.75.72:7985
+

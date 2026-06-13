@@ -1,0 +1,59 @@
+edition: 3.0.0
+name: memory-seek-app
+access: default
+
+vars: &common-env
+  SPRING_PROFILES_ACTIVE: prod
+  # 统一注入 JVM 优化参数
+  JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1 -noverify"
+
+resources:
+  auth-service:
+    component: fc3
+    props:
+      code: ./
+      region: cn-hangzhou
+      functionName: auth-backend
+      runtime: custom-container
+      customContainerConfig:
+        image: "crpi-vnph9pf4ho2oq5ad.cn-hangzhou.personal.cr.aliyuncs.com/drift-cloud/auth:v1.0.0"
+      memorySize: 512
+      cpu: 0.5
+      diskSize: 512
+      timeout: 20
+      idleTimeout: 300
+      instanceConcurrency: 20
+      internetAccess: true
+      environmentVariables:
+        SPRING_PROFILES_ACTIVE: prod
+      triggers:
+        - triggerName: http-trigger
+          triggerType: http
+          triggerConfig:
+            authType: anonymous
+            methods: [ GET, POST, PUT, DELETE, OPTIONS ]
+  photo-service:
+    component: fc3
+    props:
+      code: ./
+      region: cn-hangzhou
+      functionName: photo-backend
+      runtime: custom-container
+      customContainerConfig:
+        image: "crpi-vnph9pf4ho2oq5ad.cn-hangzhou.personal.cr.aliyuncs.com/drift-cloud/photo:v1.0.0"
+      memorySize: 1024
+      cpu: 0.5
+      diskSize: 512
+      timeout: 20
+      idleTimeout: 300
+      instanceConcurrency: 20
+      internetAccess: true
+      environmentVariables:
+        SPRING_PROFILES_ACTIVE: prod
+      triggers:
+        - triggerName: http-trigger
+          triggerType: http
+          triggerConfig:
+            authType: anonymous
+            methods: [ GET, POST, PUT, DELETE, OPTIONS ]
+
